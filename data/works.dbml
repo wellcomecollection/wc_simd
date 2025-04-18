@@ -1,0 +1,442 @@
+/* Main record table */
+Table Records {
+  id varchar [pk]                 // from main "id"
+  currentFrequency varchar
+  description text
+  duration bigint
+  edition varchar
+  physicalDescription text
+  referenceNumber varchar
+  title varchar
+  type varchar
+}
+
+/* alternativeTitles is an array of strings */
+Table AlternativeTitles {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  title varchar
+}
+
+/* availabilities is an array of structs */
+Table Availabilities {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  availability_id varchar         // from availabilities.id
+  label varchar                   // from availabilities.label
+  type varchar                    // from availabilities.type
+}
+
+/* contributors is an array of structs. 
+   Here we break out the contributor’s core info. */
+Table Contributors {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  contributor_type varchar        // from contributors.type
+  primary boolean                 // from contributors.primary
+}
+
+/* The nested agent struct from contributors */
+Table ContributorAgents {
+  id int [pk, increment]
+  contributor_id int [ref: > Contributors.id]
+  agent_id varchar                // from contributors.agent.id
+  label varchar                   // from contributors.agent.label
+  type varchar                    // from contributors.agent.type
+}
+
+/* The identifiers array nested within agent */
+Table ContributorAgentIdentifiers {
+  id int [pk, increment]
+  contributor_agent_id int [ref: > ContributorAgents.id]
+  identifier_type_id varchar      // from identifierType.id
+  identifier_type_label varchar   // from identifierType.label
+  identifier_type_type varchar    // from identifierType.type
+  type varchar                    // from the identifier's own "type" field
+  value varchar                   // from identifier's "value"
+}
+
+/* The roles array nested within contributors */
+Table ContributorRoles {
+  id int [pk, increment]
+  contributor_id int [ref: > Contributors.id]
+  label varchar                   // from roles.label
+  type varchar                    // from roles.type
+}
+
+/* createdDate is a struct */
+Table CreatedDate {
+  record_id varchar [pk, ref: > Records.id]
+  label varchar                   // from createdDate.label
+  type varchar                    // from createdDate.type
+}
+
+/* designation is an array of strings */
+Table Designations {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  designation varchar
+}
+
+/* formerFrequency is an array of strings */
+Table FormerFrequencies {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  frequency varchar
+}
+
+/* genres is an array of structs */
+Table Genres {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  label varchar                   // from genres.label
+  type varchar                    // from genres.type
+}
+
+/* Within genres, concepts is an array of structs */
+Table GenreConcepts {
+  id int [pk, increment]
+  genre_id int [ref: > Genres.id]
+  concept_id varchar              // from concepts.id
+  label varchar                   // from concepts.label
+  type varchar                    // from concepts.type
+}
+
+/* The identifiers array within each genre concept */
+Table GenreConceptIdentifiers {
+  id int [pk, increment]
+  genre_concept_id int [ref: > GenreConcepts.id]
+  identifier_type_id varchar      // from identifierType.id
+  identifier_type_label varchar   // from identifierType.label
+  identifier_type_type varchar    // from identifierType.type
+  type varchar                    // from the identifier's "type"
+  value varchar                   // from the identifier's "value"
+}
+
+/* ---------------------
+   Additional Tables
+   ---------------------
+*/
+
+/* holdings */
+Table Holdings {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  note varchar
+  type varchar
+}
+
+Table HoldingEnumerations {
+  id int [pk, increment]
+  holding_id int [ref: > Holdings.id]
+  enumeration varchar
+}
+
+Table HoldingLocations {
+  id int [pk, increment]
+  holding_id int [ref: > Holdings.id]
+  label varchar
+  linkText varchar
+  shelfmark varchar
+  type varchar
+  url varchar
+}
+
+Table HoldingLocationAccessConditions {
+  id int [pk, increment]
+  holding_location_id int [ref: > HoldingLocations.id]
+  method_id varchar
+  method_label varchar
+  method_type varchar
+  status_id varchar
+  status_label varchar
+  status_type varchar
+  type varchar
+}
+
+Table HoldingLocationLocationTypes {
+  id int [pk, increment]
+  holding_location_id int [ref: > HoldingLocations.id]
+  type_id varchar
+  type_label varchar
+  type_type varchar
+}
+
+/* identifiers (at the root level) */
+Table Identifiers {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  identifier_type_id varchar
+  identifier_type_label varchar
+  identifier_type_type varchar
+  type varchar
+  value varchar
+}
+
+/* images */
+Table Images {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  image_id varchar
+  type varchar
+}
+
+/* items */
+Table Items {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  item_id varchar
+  note varchar
+  title varchar
+  type varchar
+}
+
+Table ItemIdentifiers {
+  id int [pk, increment]
+  item_id int [ref: > Items.id]
+  identifier_type_id varchar
+  identifier_type_label varchar
+  identifier_type_type varchar
+  type varchar
+  value varchar
+}
+
+Table ItemLocations {
+  id int [pk, increment]
+  item_id int [ref: > Items.id]
+  credit varchar
+  label varchar
+  linkText varchar
+  shelfmark varchar
+  type varchar
+  url varchar
+}
+
+Table ItemLocationAccessConditions {
+  id int [pk, increment]
+  item_location_id int [ref: > ItemLocations.id]
+  method_id varchar
+  method_label varchar
+  method_type varchar
+  note varchar
+  status_id varchar
+  status_label varchar
+  status_type varchar
+  terms varchar
+  type varchar
+}
+
+Table ItemLocationLicenses {
+  id int [pk, increment]
+  item_location_id int [ref: > ItemLocations.id]
+  license_id varchar
+  license_label varchar
+  license_type varchar
+  license_url varchar
+}
+
+Table ItemLocationLocationTypes {
+  id int [pk, increment]
+  item_location_id int [ref: > ItemLocations.id]
+  type_id varchar
+  type_label varchar
+  type_type varchar
+}
+
+/* languages */
+Table Languages {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  language_id varchar
+  label varchar
+  type varchar
+}
+
+/* notes */
+Table Notes {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  note_type_id varchar
+  note_type_label varchar
+  note_type_type varchar
+  type varchar
+}
+
+Table NoteContents {
+  id int [pk, increment]
+  note_id int [ref: > Notes.id]
+  content text
+}
+
+/* -------------------------------------------------------------------
+   Additional Tables for the remaining fields in the PySpark schema
+   -------------------------------------------------------------------
+*/
+
+/* Note: The 'lettering' field is a simple string. It is best added as 
+   a column in the main Records table. For example:
+   Records.lettering varchar
+*/
+
+/* partOf: A recursive structure. Each entry may have a parent entry */
+Table PartOf {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]      // The record this partOf belongs to
+  parent_id int [ref: > PartOf.id, note: "Self-referential key for nested partOf"] 
+  partof_id varchar                           // Original partOf id from the struct
+  referenceNumber varchar
+  title varchar
+  totalDescendentParts bigint
+  totalParts bigint
+  type varchar
+}
+
+/* parts: A simple array of structs */
+Table Parts {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  part_id varchar                             // Original parts.id
+  referenceNumber varchar
+  title varchar
+  totalDescendentParts bigint
+  totalParts bigint
+  type varchar
+}
+
+/* precededBy: An array of structs similar to Parts */
+Table PrecededBy {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  precededBy_id varchar                        // Original precededBy id
+  referenceNumber varchar
+  title varchar
+  totalDescendentParts bigint
+  totalParts bigint
+  type varchar
+}
+
+/* production: A complex array of structs with nested arrays */
+Table Production {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  label varchar
+  type varchar
+}
+
+Table ProductionAgents {
+  id int [pk, increment]
+  production_id int [ref: > Production.id]
+  label varchar
+  type varchar
+}
+
+Table ProductionDates {
+  id int [pk, increment]
+  production_id int [ref: > Production.id]
+  label varchar
+  type varchar
+}
+
+Table ProductionPlaces {
+  id int [pk, increment]
+  production_id int [ref: > Production.id]
+  label varchar
+  type varchar
+}
+
+Table ProductionFunction {
+  id int [pk, increment]
+  production_id int [ref: > Production.id]
+  label varchar
+  type varchar
+}
+
+/* subjects: An array of structs with nested concepts and identifiers */
+Table Subjects {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  subject_id varchar                         // Original subjects.id
+  label varchar
+  type varchar
+}
+
+/* Concepts within a subject */
+Table SubjectConcepts {
+  id int [pk, increment]
+  subject_id int [ref: > Subjects.id]
+  concept_id varchar                         // Original concepts.id
+  label varchar
+  type varchar
+}
+
+/* Identifiers within a subject concept */
+Table SubjectConceptIdentifiers {
+  id int [pk, increment]
+  subject_concept_id int [ref: > SubjectConcepts.id]
+  identifier_type_id varchar
+  identifier_type_label varchar
+  identifier_type_type varchar
+  type varchar
+  value varchar
+}
+
+/* Identifiers directly under a subject */
+Table SubjectIdentifiers {
+  id int [pk, increment]
+  subject_id int [ref: > Subjects.id]
+  identifier_type_id varchar
+  identifier_type_label varchar
+  identifier_type_type varchar
+  type varchar
+  value varchar
+}
+
+/* succeededBy: An array of structs */
+Table SucceededBy {
+  id int [pk, increment]
+  record_id varchar [ref: > Records.id]
+  succeededBy_id varchar                      // Original succeededBy id
+  referenceNumber varchar
+  title varchar
+  totalDescendentParts bigint
+  totalParts bigint
+  type varchar
+}
+
+/* thumbnail: A struct with nested arrays */
+Table Thumbnail {
+  record_id varchar [pk, ref: > Records.id]    // One thumbnail per record
+  type varchar
+  url varchar
+}
+
+Table ThumbnailAccessConditions {
+  id int [pk, increment]
+  thumbnail_record_id varchar [ref: > Thumbnail.record_id]
+  accessCondition varchar                      // Each access condition (string)
+}
+
+Table ThumbnailLicense {
+  id int [pk, increment]
+  thumbnail_record_id varchar [ref: > Thumbnail.record_id]
+  license_id varchar
+  label varchar
+  type varchar
+  url varchar
+}
+
+Table ThumbnailLocationTypes {
+  id int [pk, increment]
+  thumbnail_record_id varchar [ref: > Thumbnail.record_id]
+  type_id varchar
+  label varchar
+  type varchar
+}
+
+/* workType: A simple struct */
+Table WorkType {
+  record_id varchar [pk, ref: > Records.id]    // One workType per record
+  worktype_id varchar                          // Original workType.id
+  label varchar
+  type varchar
+}

@@ -1,0 +1,310 @@
+root
+ |-- alternativeTitles: array
+ |    |-- element: string
+ |-- availabilities: array
+ |    |-- element: struct
+ |    |    |-- id: string
+ |    |    |-- label: string
+ |    |    |-- type: string
+ |-- contributors: array
+ |    |-- element: struct
+ |    |    |-- agent: struct
+ |    |    |    |-- id: string
+ |    |    |    |-- identifiers: array
+ |    |    |    |    |-- element: struct
+ |    |    |    |    |    |-- identifierType: struct
+ |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |-- value: string
+ |    |    |    |-- label: string
+ |    |    |    |-- type: string
+ |    |    |-- primary: boolean
+ |    |    |-- roles: array
+ |    |    |    |-- element: struct
+ |    |    |    |    |-- label: string
+ |    |    |    |    |-- type: string
+ |    |    |-- type: string
+ |-- createdDate: struct
+ |    |-- label: string
+ |    |-- type: string
+ |-- currentFrequency: string
+ |-- description: string
+ |-- designation: array
+ |    |-- element: string
+ |-- duration: long
+ |-- edition: string
+ |-- formerFrequency: array
+ |    |-- element: string
+ |-- genres: array
+ |    |-- element: struct
+ |    |    |-- concepts: array
+ |    |    |    |-- element: struct
+ |    |    |    |    |-- id: string
+ |    |    |    |    |-- identifiers: array
+ |    |    |    |    |    |-- element: struct
+ |    |    |    |    |    |    |-- identifierType: struct
+ |    |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |-- value: string
+ |    |    |    |    |-- label: string
+ |    |    |    |    |-- type: string
+ |    |    |-- label: string
+ |    |    |-- type: string
+ |-- holdings: array
+ |    |-- element: struct
+ |    |    |-- enumeration: array
+ |    |    |    |-- element: string
+ |    |    |-- location: struct
+ |    |    |    |-- accessConditions: array
+ |    |    |    |    |-- element: struct
+ |    |    |    |    |    |-- method: struct
+ |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |-- status: struct
+ |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |-- type: string
+ |    |    |    |-- label: string
+ |    |    |    |-- linkText: string
+ |    |    |    |-- locationType: struct
+ |    |    |    |    |-- id: string
+ |    |    |    |    |-- label: string
+ |    |    |    |    |-- type: string
+ |    |    |    |-- shelfmark: string
+ |    |    |    |-- type: string
+ |    |    |    |-- url: string
+ |    |    |-- note: string
+ |    |    |-- type: string
+ |-- id: string
+ |-- identifiers: array
+ |    |-- element: struct
+ |    |    |-- identifierType: struct
+ |    |    |    |-- id: string
+ |    |    |    |-- label: string
+ |    |    |    |-- type: string
+ |    |    |-- type: string
+ |    |    |-- value: string
+ |-- images: array
+ |    |-- element: struct
+ |    |    |-- id: string
+ |    |    |-- type: string
+ |-- items: array
+ |    |-- element: struct
+ |    |    |-- id: string
+ |    |    |-- identifiers: array
+ |    |    |    |-- element: struct
+ |    |    |    |    |-- identifierType: struct
+ |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |-- type: string
+ |    |    |    |    |-- type: string
+ |    |    |    |    |-- value: string
+ |    |    |-- locations: array
+ |    |    |    |-- element: struct
+ |    |    |    |    |-- accessConditions: array
+ |    |    |    |    |    |-- element: struct
+ |    |    |    |    |    |    |-- method: struct
+ |    |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |-- note: string
+ |    |    |    |    |    |    |-- status: struct
+ |    |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |-- terms: string
+ |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |-- credit: string
+ |    |    |    |    |-- label: string
+ |    |    |    |    |-- license: struct
+ |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |-- url: string
+ |    |    |    |    |-- linkText: string
+ |    |    |    |    |-- locationType: struct
+ |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |-- type: string
+ |    |    |    |    |-- shelfmark: string
+ |    |    |    |    |-- type: string
+ |    |    |    |    |-- url: string
+ |    |    |-- note: string
+ |    |    |-- title: string
+ |    |    |-- type: string
+ |-- languages: array
+ |    |-- element: struct
+ |    |    |-- id: string
+ |    |    |-- label: string
+ |    |    |-- type: string
+ |-- lettering: string
+ |-- notes: array
+ |    |-- element: struct
+ |    |    |-- contents: array
+ |    |    |    |-- element: string
+ |    |    |-- noteType: struct
+ |    |    |    |-- id: string
+ |    |    |    |-- label: string
+ |    |    |    |-- type: string
+ |    |    |-- type: string
+ |-- partOf: array
+ |    |-- element: struct
+ |    |    |-- id: string
+ |    |    |-- partOf: array
+ |    |    |    |-- element: struct
+ |    |    |    |    |-- id: string
+ |    |    |    |    |-- partOf: array
+ |    |    |    |    |    |-- element: struct
+ |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |-- partOf: array
+ |    |    |    |    |    |    |    |-- element: struct
+ |    |    |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |    |    |-- partOf: array
+ |    |    |    |    |    |    |    |    |    |-- element: struct
+ |    |    |    |    |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |    |    |    |    |-- partOf: array
+ |    |    |    |    |    |    |    |    |    |    |    |-- element: struct
+ |    |    |    |    |    |    |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |-- partOf: array
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |-- element: struct
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- partOf: array
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- element: struct
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- referenceNumber: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- title: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- totalDescendentParts: long
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- totalParts: long
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- referenceNumber: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- title: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- totalDescendentParts: long
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- totalParts: long
+ |    |    |    |    |    |    |    |    |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |-- referenceNumber: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |-- title: string
+ |    |    |    |    |    |    |    |    |    |    |    |    |-- totalDescendentParts: long
+ |    |    |    |    |    |    |    |    |    |    |    |    |-- totalParts: long
+ |    |    |    |    |    |    |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |    |    |    |    |-- referenceNumber: string
+ |    |    |    |    |    |    |    |    |    |    |-- title: string
+ |    |    |    |    |    |    |    |    |    |    |-- totalDescendentParts: long
+ |    |    |    |    |    |    |    |    |    |    |-- totalParts: long
+ |    |    |    |    |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |    |    |-- referenceNumber: string
+ |    |    |    |    |    |    |    |    |-- title: string
+ |    |    |    |    |    |    |    |    |-- totalDescendentParts: long
+ |    |    |    |    |    |    |    |    |-- totalParts: long
+ |    |    |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |-- referenceNumber: string
+ |    |    |    |    |    |    |-- title: string
+ |    |    |    |    |    |    |-- totalDescendentParts: long
+ |    |    |    |    |    |    |-- totalParts: long
+ |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |-- referenceNumber: string
+ |    |    |    |    |-- title: string
+ |    |    |    |    |-- totalDescendentParts: long
+ |    |    |    |    |-- totalParts: long
+ |    |    |    |    |-- type: string
+ |    |    |-- referenceNumber: string
+ |    |    |-- title: string
+ |    |    |-- totalDescendentParts: long
+ |    |    |-- totalParts: long
+ |    |    |-- type: string
+ |-- parts: array
+ |    |-- element: struct
+ |    |    |-- id: string
+ |    |    |-- referenceNumber: string
+ |    |    |-- title: string
+ |    |    |-- totalDescendentParts: long
+ |    |    |-- totalParts: long
+ |    |    |-- type: string
+ |-- physicalDescription: string
+ |-- precededBy: array
+ |    |-- element: struct
+ |    |    |-- id: string
+ |    |    |-- referenceNumber: string
+ |    |    |-- title: string
+ |    |    |-- totalDescendentParts: long
+ |    |    |-- totalParts: long
+ |    |    |-- type: string
+ |-- production: array
+ |    |-- element: struct
+ |    |    |-- agents: array
+ |    |    |    |-- element: struct
+ |    |    |    |    |-- label: string
+ |    |    |    |    |-- type: string
+ |    |    |-- dates: array
+ |    |    |    |-- element: struct
+ |    |    |    |    |-- label: string
+ |    |    |    |    |-- type: string
+ |    |    |-- function: struct
+ |    |    |    |-- label: string
+ |    |    |    |-- type: string
+ |    |    |-- label: string
+ |    |    |-- places: array
+ |    |    |    |-- element: struct
+ |    |    |    |    |-- label: string
+ |    |    |    |    |-- type: string
+ |    |    |-- type: string
+ |-- referenceNumber: string
+ |-- subjects: array
+ |    |-- element: struct
+ |    |    |-- concepts: array
+ |    |    |    |-- element: struct
+ |    |    |    |    |-- id: string
+ |    |    |    |    |-- identifiers: array
+ |    |    |    |    |    |-- element: struct
+ |    |    |    |    |    |    |-- identifierType: struct
+ |    |    |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |-- type: string
+ |    |    |    |    |    |    |-- value: string
+ |    |    |    |    |-- label: string
+ |    |    |    |    |-- type: string
+ |    |    |-- id: string
+ |    |    |-- identifiers: array
+ |    |    |    |-- element: struct
+ |    |    |    |    |-- identifierType: struct
+ |    |    |    |    |    |-- id: string
+ |    |    |    |    |    |-- label: string
+ |    |    |    |    |    |-- type: string
+ |    |    |    |    |-- type: string
+ |    |    |    |    |-- value: string
+ |    |    |-- label: string
+ |    |    |-- type: string
+ |-- succeededBy: array
+ |    |-- element: struct
+ |    |    |-- id: string
+ |    |    |-- referenceNumber: string
+ |    |    |-- title: string
+ |    |    |-- totalDescendentParts: long
+ |    |    |-- totalParts: long
+ |    |    |-- type: string
+ |-- thumbnail: struct
+ |    |-- accessConditions: array
+ |    |    |-- element: string
+ |    |-- license: struct
+ |    |    |-- id: string
+ |    |    |-- label: string
+ |    |    |-- type: string
+ |    |    |-- url: string
+ |    |-- locationType: struct
+ |    |    |-- id: string
+ |    |    |-- label: string
+ |    |    |-- type: string
+ |    |-- type: string
+ |    |-- url: string
+ |-- title: string
+ |-- type: string
+ |-- workType: struct
+ |    |-- id: string
+ |    |-- label: string
+ |    |-- type: string

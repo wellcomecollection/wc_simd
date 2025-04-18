@@ -1,0 +1,7 @@
+.conda
+data/imports/*
+!data/imports/data_import_index.md
+out
+.env
+**/__pycache__
+**/.pytest_cache

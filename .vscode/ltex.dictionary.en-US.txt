@@ -2,3 +2,16 @@ Wellcome
 pytest
 simd
 LTeX
+SparkSQL
+UDAF
+IIIF
+metastore
+MLlib
+GraphX
+SparkR
+checkpointing
+Snowpark
+Snowpipe
+pglogical
+pgSQL
+hoc

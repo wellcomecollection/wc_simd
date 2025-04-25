@@ -23,6 +23,10 @@ Explorations and experiments found in [notebooks](./notebooks/).
 
 Bespoke data files are placed in [data](./data). Files that can be imported from other sources are found in [data/imports](./data/imports/). See: [Data Import Index](./data/imports/data_import_index.md)
 
+## Local Spark with Hadoop and Hive
+
+See [this](./docs/local_hive_spark.md)
+
 ## Tests
 
 I use [pytest](https://docs.pytest.org/) for testing. Tests can be found in [tests](./tests/).

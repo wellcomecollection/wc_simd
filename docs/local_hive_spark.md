@@ -91,16 +91,14 @@ Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/mapred-site.xml
 
 ```xml
 <configuration>
-    <property>
-       <name>mapreduce.framework.name</name>
-       <value>yarn</value>
-    </property>
-    <property>
+  <property>
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+  </property>
+  <property>
     <name>mapreduce.application.classpath</name>   
-  <value>
-$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*:$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*
-  </value>
-    </property>
+    <value>$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*:$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*</value>
+  </property>
 </configuration>
 ```
 
@@ -116,9 +114,7 @@ Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/yarn-site.xml` 
   </property>
   <property>
     <name>yarn.nodemanager.env-whitelist</name>  
-     <value>
-JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME
-    </value>
+    <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
   </property>
 </configuration>
 ```
@@ -126,7 +122,6 @@ JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_
 - Enable SSH
   - Create `~/.ssh/id_rsa` (if not already present) and run `cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys`. This allows local SSH logins without a password.
   - SSH login permissions is a must: `sudo systemsetup -setremotelogin on`. Test with `ssh localhost` (<https://stackoverflow.com/a/42037840/2844684>)
-  -
   - Edit macOS `hosts` file to point name of localhost (e.g. `macbookhostname`) to `127.0.0.1`
 
 - Format HDFS: `hadoop namenode -format`
@@ -369,6 +364,12 @@ spark = SparkSession.builder \
 spark.sql("SHOW TABLES").show()
 ```
 
+Tip: To avoid seeing many warnings from Hive, run:
+
+```python
+spark.sparkContext.setLogLevel("ERROR")
+```
+
 ---
 
 ## References
@@ -376,3 +377,29 @@ spark.sql("SHOW TABLES").show()
 - PySpark: <https://datacouch.medium.com/how-to-set-up-spark-environment-on-mac-c1553005e1f4>
 - Hive: <https://medium.com/@daibinraju/installing-hadoop-with-hive-on-mac-m1-using-homebrew-3505c6166e83>
 - Hadoop: <<https://medium.com/@MinatoNamikaze02/installing-hadoop-on-macos-m1-m2-2023-d963abeab38e>>
+
+---
+
+## Appendix
+
+### Running PySpark without Hadoop
+
+Without Hadoop and Hive, PySpark stores the metadata of tables in a derby database and the contents of the tables in the current working directory. They are stored in the folders `metastore_db` and `spark-warehouse` respectively.
+
+For my workflow which concurrent notebooks and test runners, it's a blocker as the derby locks the whole database for one process. It's also not fun to manage the current working directory (so they point to the same folder) as my notebooks and tests are run from separate directories.
+These are other advantages of setting Hadoop/Yarn locally for Spark
+
+**Realistic environment**
+You’re testing against the same services (HDFS, YARN, Hive metastore) you’d use in production—so you’ll catch config quirks, classpath issues, and permission problems before they hit the cluster.
+
+**Distributed semantics (sort of)**
+Even on one machine, the multi-process nature gives you a taste of data locality, block replication, shuffle behavior, and RPCs between components.
+
+**Metastore durability & sharing**
+A local MySQL metastore persists metadata across sessions and can, in principle, be accessed concurrently by multiple Spark/Hive clients in your dev environment.
+
+**End-to-end testing**
+You can validate end-to-end workflows—ingest to HDFS, run Hive/Spark SQL, export results—without ever altering production credentials or endpoints.
+
+**Feature experimentation**
+Try out security integrations (Kerberos, Ranger), Hive UDFs, or custom YARN schedulers locally before rolling them out cluster-wide.

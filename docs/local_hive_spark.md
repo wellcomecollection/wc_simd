@@ -1,47 +1,48 @@
 # Local Hive with PySpark Setup
 
-This guide walks you through installing and configuring a fully‑functional, local Hive and PySpark development environment on Apple Silicon (M1/M2/M3) macOS machines. By leveraging a secondary, x86_64 Homebrew installation under Rosetta 2, we’ll install Java 8–dependent Hive alongside Hadoop, configure HDFS and YARN, set up MySQL as Hive’s metastore, and integrate Hive with Spark so you can run PySpark queries against your Hive warehouse.
+This guide walks you through installing and configuring a fully‑functional, local Hive and PySpark development environment on Apple Silicon (M1/M2/M3) macOS machines. We install Java 8–dependent Hive alongside Hadoop, configure HDFS and YARN, set up MySQL as Hive’s metastore, and integrate Hive with Spark so you can run PySpark queries against your Hive warehouse.
 
 Follow each section—from bootstrapping Homebrew and formatting HDFS to tuning `spark-defaults.conf`—to get Hadoop, Hive, and PySpark all working seamlessly on your Mac.
 
-For reference, complete configuration files can be found in [`local_hive_spark_conf`](./local_hive_spark_conf/). For both those configuration files and instructions here, replace `{username}` with your macOS terminal username.
+## Important Notes
+
+For both those configuration files and instructions here, replace `$HOME` with the path of your home folder.
+
+These instructions largely work for Linux too, just be aware of macOS specific commands and swap accordingly.
 
 ## Versions
 
-| Hadoop | Hive   | Spark  | macOS  |
-| ------ | ------ | ------ | ------ |
-| 3.4.1  | 4.0.1  | 3.5.5  | 15.4   |
+| Hadoop | Hive   | Spark  | macOS  | Ubuntu |
+| ------ | ------ | ------ | ------ | ------ |
+| 3.4.1  | 4.0.1  | 3.5.5  | 15.4   | 22.04  |
 
-## Brew for arch x86_64 for Hive installation
+## Install Pre-requisites
 
-We install another copy of brew exclusively for x86_64 as Hive requires Java 8 which only runs on x86_64 processors (i.e. Not Apple's M1, M2, M3, MX processors). Hence, we use Apple's Rosetta to run Java 8 in x86_64 emulation on the latest Apple M1/2/3/4 processors.
+Download from the following locations and expand into your home folder:
 
-[Reference](https://medium.com/@daibinraju/installing-hadoop-with-hive-on-mac-m1-using-homebrew-3505c6166e83)
+- [Hadoop](https://hadoop.apache.org/releases.html)
+- [Hive](https://www.apache.org/dyn/closer.cgi/hive/)
+- [Spark](https://spark.apache.org/downloads.html)
 
-Install the second copy of homebrew into the `/usr/local/homebrew` directory and launch it in compatibility mode with the command arch -x86_64.
+Install Java 8 and 17:
 
-`curl -L <https://github.com/Homebrew/brew/tarball/master> --output homebrew.tar`
+- Java 8: `brew install --cask temurin@8`
+- Java 17: `brew install openjdk@17`
+
+---
+
+## Environment variables
+
+Add these lines to the end of `~/.zshrc`:
 
 ```sh
-sudo tar -xvf homebrew.tar -C /usr/local
-cd /usr/local
-sudo mv Homebrew-brew-f30f68b homebrew
-sudo chown -R {username} homebrew
+export HADOOP_HOME=$HOME/hadoop-3.4.1
+export HIVE_HOME=$HOME/apache-hive-4.0.1-bin
+export SPARK_HOME=$HOME/spark-3.5.5-bin-hadoop3
+export PATH=$PATH:$HIVE_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 ```
 
-Add aliases to your `~/.zshrc` file. Since `/usr/local/homebrew/bin` and `/opt/homebrew/bin` has brew binaries, place `/opt/homebrew/bin` below `/usr/local/homebrew/bin` while setting the path to default the brew command to use brew in `/opt/homebrew/bin`.
-
-```sh
-export PATH=/usr/local/homebrew/sbin:/usr/local/homebrew/bin:$PATH
-alias axbrew='arch -x86_64 /usr/local/homebrew/bin/brew'
-export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
-```
-
-Start a new console and install hive using brew x86_64
-
-`axbrew install hive`
-
-This will install Hive and Hadoop into `usr/local/homebrew/Cellar/`.
+Note the version number and variant of the downloaded software and adjust accordingly.
 
 ---
 
@@ -49,11 +50,11 @@ This will install Hive and Hadoop into `usr/local/homebrew/Cellar/`.
 
 [Reference](https://medium.com/@daibinraju/installing-hadoop-with-hive-on-mac-m1-using-homebrew-3505c6166e83)
 
-Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/hadoop-env.sh` to update JAVA_HOME:
+Edit `$HADOOP_HOME/etc/hadoop/hadoop-env.sh` to update JAVA_HOME:
 
-`export JAVA_HOME=/usr/local/homebrew/Cellar/openjdk@8/1.8.0-442`
+`export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-8.jdk/Contents/Home`
 
-Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/core-site.xml` to add the following configuration:
+Edit `$HADOOP_HOME/etc/hadoop/core-site.xml` to add the following configuration:
 
 ```xml
 <configuration>
@@ -64,7 +65,7 @@ Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/core-site.xml` 
 </configuration>
 ```
 
-Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/hdfs-site.xml` with:
+Edit `$HADOOP_HOME/etc/hadoop/hdfs-site.xml` with:
 
 ```xml
 <configuration>
@@ -78,16 +79,16 @@ Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/hdfs-site.xml` 
   </property>
   <property>
     <name>dfs.namenode.name.dir</name>
-    <value>file:///Users/{username}/hdfs/namenode</value>
+    <value>file://$HOME/hdfs/namenode</value>
   </property>
   <property>
     <name>dfs.datanode.data.dir</name>
-    <value>file:///Users/{username}/hdfs/datanode</value>
+    <value>file://$HOME/hdfs/datanode</value>
   </property>
 </configuration>
 ```
 
-Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/mapred-site.xml` with:
+Edit `$HADOOP_HOME/etc/hadoop/mapred-site.xml` with:
 
 ```xml
 <configuration>
@@ -102,7 +103,7 @@ Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/mapred-site.xml
 </configuration>
 ```
 
-Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/yarn-site.xml` with:
+Edit `$HADOOP_HOME/etc/hadoop/yarn-site.xml` with:
 
 ```xml
 <configuration>
@@ -123,6 +124,7 @@ Edit `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/yarn-site.xml` 
   - Create `~/.ssh/id_rsa` (if not already present) and run `cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys`. This allows local SSH logins without a password.
   - SSH login permissions is a must: `sudo systemsetup -setremotelogin on`. Test with `ssh localhost` (<https://stackoverflow.com/a/42037840/2844684>)
   - Edit macOS `hosts` file to point name of localhost (e.g. `macbookhostname`) to `127.0.0.1`
+  - Terminal and/or VS Code need Full Disk Access permissions to turn on SSH. Turn them on in System Settings → Privacy & Security → Full Disk Access.
 
 - Format HDFS: `hadoop namenode -format`
   - After format, delete all files under each DataNode’s `dfs.datanode.data.dir`. (We only have one Datanode in this guide because it is local and not an actual cluster.)
@@ -134,19 +136,13 @@ sudo systemsetup -setremotelogin on
 start-all.sh
 ```
 
-- Shutdown HDF with `stop-all.sh`
-- Verify dashboard: <http://localhost:9870>
-
-- Create the warehouse directory in HDFS
-
-```sh
-hdfs dfs -mkdir -p /user/hive/warehouse 
-hdfs dfs -chmod g+w /user/hive/warehouse
-```
+- Operation
+  - Shutdown Hadoop with `stop-all.sh`
+  - Dashboard: <http://localhost:9870>
 
 ### Troubleshooting Hadoop
 
-- Logs are found in: `/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/logs`
+- Logs are found in: `$HADOOP_HOME/logs`
 
 See running Hadoop processes using `jps`. We want to see these (ignore the process IDs):
 
@@ -163,19 +159,19 @@ See running Hadoop processes using `jps`. We want to see these (ignore the proce
 
 ## Hive Configuration
 
-- Go to `/usr/local/homebrew/Cellar/hive/4.0.1/libexec/conf`
+- Go to `$HIVE_HOME/conf`
 - Copy `hive-site.default.xml` to `hive-site.xml`
 - Edit properties in `hive-site.xml` as follows:
 
 ```xml
   <property>
     <name>hive.exec.local.scratchdir</name>
-    <value>/Users/{username}/hive_logs/scratchdir</value>
+    <value>$HOME/hive_logs/scratchdir</value>
     <description>Local scratch space for Hive jobs</description>
   </property>
   <property>
     <name>hive.downloaded.resources.dir</name>
-    <value>/Users/{username}/hive_logs/${hive.session.id}_resources</value>
+    <value>$HOME/hive_logs/${hive.session.id}_resources</value>
     <description>Temporary local directory for added resources in the remote file system.</description>
   </property>
 
@@ -229,13 +225,13 @@ See running Hadoop processes using `jps`. We want to see these (ignore the proce
 
   <property>
     <name>hive.querylog.location</name>
-    <value>/Users/{username}/hive_logs</value>
+    <value>$HOME/hive_logs</value>
     <description>Location of Hive run time structured log file</description>
   </property>
 
   <property>
     <name>hive.server2.logging.operation.log.location</name>
-    <value>/Users/{username}/hive_logs/operation_logs</value>
+    <value>$HOME/hive_logs/operation_logs</value>
     <description>Top level directory where operation logs are stored if logging functionality is enabled</description>
   </property>
 
@@ -260,15 +256,27 @@ See running Hadoop processes using `jps`. We want to see these (ignore the proce
 Edit `hive-log4j2.roperties`:
 
 ```conf
-property.hive.log.dir = /Users/{username}/hive_logs
+property.hive.log.dir = $HOME/hive_logs
 ```
 
 ### Setup MySQL for Hive Metastore
 
 Go to <https://dev.mysql.com/downloads/connector/j/> select operating system as Platform Independent, and download and extract the tar file.
 
-Copy the jar file into hive's lib folder:
-`cp mysql-connector-j-8.0.31.jar /usr/local/homebrew/Cellar/hive/4.0.1/libexec/lib/`
+Copy the jar file into Hive's lib folder and spark's lib folder:
+
+```sh
+cp mysql-connector-j-8.0.31.jar $HIVE_HOME/lib/
+cp mysql-connector-j-8.0.31.jar $SPARK_HOME/jars/
+```
+
+Note the jar file extracted above might be of a different version. Adjust accordingly.
+
+If the above is not done, PySpark will have this error:
+
+```txt
+Attempt to invoke the "HikariCP" plugin to create a ConnectionPool gave an error : The specified datastore driver ("com.mysql.cj.jdbc.Driver") was not found in the CLASSPATH. Please check your CLASSPATH specification, and the name of the driver.
+```
 
 Install and run MySQL:
 
@@ -291,7 +299,6 @@ FLUSH PRIVILEGES;
 Initialize metastore schema:
 
 ```sh
-cd /usr/local/homebrew/Cellar/hive/4.0.1/libexec/bin
 schematool -initSchema -dbType mysql
 ```
 
@@ -301,25 +308,7 @@ schematool -initSchema -dbType mysql
 
 ## PySpark
 
-Go to Spark home:
-
-``` sh
-cd "$(dirname "$(readlink -f "$(which spark-shell)")")"/../libexec
-```
-
-Copy the jar file with MySQL connector to the Spark Jars directory:
-
-```sh
-cp /usr/local/homebrew/Cellar/hive/4.0.1/libexec/lib/mysql-connector-j-9.2.0.jar jars/
-```
-
-If the above is not done, we get:
-
-```txt
-Attempt to invoke the "HikariCP" plugin to create a ConnectionPool gave an error : The specified datastore driver ("com.mysql.cj.jdbc.Driver") was not found in the CLASSPATH. Please check your CLASSPATH specification, and the name of the driver.
-```
-
-Edit `/opt/homebrew/Cellar/apache-spark/3.5.5/libexec/conf/spark-defaults.conf` with:
+Edit `$SPARK_HOME/conf/spark-defaults.conf` with:
 
 ```conf
 spark.sql.catalogImplementation=hive
@@ -329,20 +318,9 @@ Symlink Hadoop and Hive configuration files into Spark's `conf` directory.
 
 ```sh
 cd conf
-ln -s /usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/hdfs-site.xml .
-ln -s /usr/local/homebrew/Cellar/hadoop/3.4.1/libexec/etc/hadoop/core-site.xml .
-ln -s /usr/local/homebrew/Cellar/hive/4.0.1/libexec/conf/hive-site.xml .
-```
-
-### Environment variables
-
-Your `~/.zshenv` should have these lines:
-
-```sh
-export HADOOP_HOME=/usr/local/homebrew/Cellar/hadoop/3.4.1/libexec
-export HIVE_HOME=/usr/local/homebrew/Cellar/hive/4.0.1/libexec
-export SPARK_HOME=/opt/homebrew/Cellar/apache-spark/3.5.5/libexec
-export PATH=$PATH:/$HIVE_HOME/bin:$HADOOP_HOME/bin
+ln -s $HADOOP_HOME/etc/hadoop/hdfs-site.xml .
+ln -s $HADOOP_HOME/etc/hadoop/core-site.xml .
+ln -s $HIVE_HOME/conf/hive-site.xml .
 ```
 
 ### Example PySpark usage

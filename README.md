@@ -4,16 +4,15 @@ A workspace by [@danniesim](https://github.com/danniesim) while working with the
 
 This workspace is meant to be used with VS Code.
 
-## Poetry and Python Package
+## UV and Python Package
 
  The source of the `wc_simd` Python package is found in [src/wc_simd](./src/wc_simd/)
 
-I use Poetry for Python dependency management and to be able to import the `wc_simd` module from code, run: `poetry install` from the repo root.
+I use UV for Python dependency management, you may install it with this line `curl -LsSf https://astral.sh/uv/install.sh | sh`.
 
-If `requirements.txt` is needed:
+To be able to import the `wc_simd` module from code and install Python dependencies, run: `uv sync` from the repo root.
 
-- Install exporter: `poetry self add poetry-plugin-export`
-- Export `requirements.txt`: `poetry export --without-hashes --format=requirements.txt > requirements.txt`
+If `requirements.txt` is needed, run: `uv run pip freeze > requirements.txt`
 
 ## Notebooks
 

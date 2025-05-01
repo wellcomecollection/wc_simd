@@ -9,3 +9,4 @@ out
 **/.pytest_cache
 **/spark-warehouse
 **/metastore_db
+*.egg-info/

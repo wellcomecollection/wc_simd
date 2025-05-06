@@ -37,14 +37,53 @@ def start_instance(client, instance_id: str):
         sys.exit(1)
 
 
+def force_stop_instance(client, instance_id: str):
+    print(f"Force stopping instance {instance_id}…")
+    try:
+        client.stop_instances(InstanceIds=[instance_id], Force=True)
+        waiter = client.get_waiter("instance_stopped")
+        waiter.wait(InstanceIds=[instance_id])
+        print(f"✅ Instance {instance_id} is now forcibly stopped.")
+    except ClientError as e:
+        print(f"Error force stopping instance: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+def restart_instance(client, instance_id: str):
+    print(f"Restarting instance {instance_id}…")
+    try:
+        stop_instance(client, instance_id)
+        start_instance(client, instance_id)
+        print(f"✅ Instance {instance_id} has been restarted.")
+    except ClientError as e:
+        print(f"Error restarting instance: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+def force_restart_instance(client, instance_id: str):
+    print(f"Force restarting instance {instance_id}…")
+    try:
+        force_stop_instance(client, instance_id)
+        start_instance(client, instance_id)
+        print(f"✅ Instance {instance_id} has been force restarted.")
+    except ClientError as e:
+        print(f"Error force restarting instance: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
 def parse_args():
     p = argparse.ArgumentParser(
         description="Start or stop a single EC2 instance and wait for it to change state."
     )
     p.add_argument(
         "action",
-        choices=["start", "stop"],
-        help="Whether to start or stop the instance",
+        choices=[
+            "start",
+            "stop",
+            "force-stop",
+            "restart",
+            "force-restart"],
+        help="Whether to start, stop, force-stop, restart, or force-restart the instance",
     )
     p.add_argument(
         "--instance-id",
@@ -67,9 +106,16 @@ def main():
         stop_instance(ec2, args.instance_id)
     elif args.action == "start":
         start_instance(ec2, args.instance_id)
+    elif args.action == "force-stop":
+        force_stop_instance(ec2, args.instance_id)
+    elif args.action == "restart":
+        restart_instance(ec2, args.instance_id)
+    elif args.action == "force-restart":
+        force_restart_instance(ec2, args.instance_id)
     else:
         # argparse should prevent this
-        sys.exit("Invalid action; choose 'start' or 'stop'.")
+        sys.exit(
+            "Invalid action; choose 'start', 'stop', 'force-stop', 'restart', or 'force-restart'.")
 
 
 if __name__ == "__main__":

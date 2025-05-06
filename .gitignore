@@ -1,6 +1,6 @@
 
 .DS_store
-.conda
+.venv
 data/imports/*
 !data/imports/data_import_index.md
 out

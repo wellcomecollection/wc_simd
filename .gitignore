@@ -1,6 +1,7 @@
 
 .DS_store
 .venv
+data/iiif_manifests
 data/imports/*
 !data/imports/data_import_index.md
 out

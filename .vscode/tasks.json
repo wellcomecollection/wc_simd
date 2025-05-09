@@ -1,0 +1,46 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Launch Chromium",
+            "type": "shell",
+            "command": "chromium --remote-debugging-port=9222 --user-data-dir=remote-debug-profile http://localhost:8501",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Enable Remote Login",
+            "type": "shell",
+            "command": "sudo systemsetup -setremotelogin on",
+        },
+        {
+            "label": "Download Dataset",
+            "type": "shell",
+            "command": "python src/wc_simd/dataset.py",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Start Hadoop Daemons",
+            "type": "shell",
+            "command": "start-all.sh",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Stop Hadoop Daemons",
+            "type": "shell",
+            "command": "stop-all.sh",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

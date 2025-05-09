@@ -1,5 +1,5 @@
 
-.DS_store
+**/.DS_store
 .venv
 data/iiif_manifests
 data/imports/*

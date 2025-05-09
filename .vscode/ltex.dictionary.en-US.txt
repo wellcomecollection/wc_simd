@@ -20,3 +20,9 @@ Wellcome
 wc
 DataNode
 Datanode
+OpenVLM
+vLLM
+olmOCR
+Qwen
+cpp
+SGLang

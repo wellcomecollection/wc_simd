@@ -33,3 +33,10 @@ I use [pytest](https://docs.pytest.org/) for testing. Tests can be found in [tes
 ## Lint and Spellcheck
 
 I use LTeX and Markdown Lint to keep my docs and comments sane. Here are my [recommended VS Code extensions](./.vscode/extensions.json)
+
+## EC2 Worker Instance
+
+This VS Code workspace can be run on a remote EC2 instance. I use a [c5.4xlarge](https://instances.vantage.sh/aws/ec2/c5.4xlarge) instance.
+
+Typically, long-running jobs can be run with `screen` which will continue running programs started on the command line even if the SSH connection is gone.
+Once reconnected via SSH, we can retrieve the terminal running the program with `screen -R`. List all terminals with `screen -list`.

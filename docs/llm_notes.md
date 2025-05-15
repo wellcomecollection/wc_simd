@@ -16,6 +16,7 @@ By: @danniesim
   - [How to run Qwen 2.5 on AWS AI chips using Hugging Face libraries](https://aws.amazon.com/blogs/machine-learning/how-to-run-qwen-2-5-on-aws-ai-chips-using-hugging-face-libraries/)
   - [Hugging Face Optimum Neuron Docs](https://huggingface.co/docs/optimum-neuron/en/index)
   - **NOTE: Requires compilation of models into Inferentia**
+  - **NOTE: [Optimum Neuron Cache](https://huggingface.co/aws-neuron/optimum-neuron-cache/blob/main/README.md) does not work for me.
 
 ## Benchmarks
 

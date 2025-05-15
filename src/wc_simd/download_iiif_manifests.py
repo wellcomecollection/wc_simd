@@ -69,17 +69,20 @@ def download_iiif_manifests(
         if os.path.exists(full_path):
             continue
 
-        # Try downloading up to 3 times
+        # Try downloading up to 3 times, but skip retries if 404 is encountered
         success = False
         for attempt in range(3):
             try:
                 resp = requests.get(url, timeout=10)
+                if resp.status_code == 404:
+                    print(f"404 Not Found: {url}")
+                    break  # Exit retry loop on 404
                 resp.raise_for_status()
                 with open(full_path, "w") as f:
                     f.write(resp.text)
                 success = True
                 break
-            except Exception:
+            except Exception as e:
                 if attempt < 2:  # Don't sleep after the last attempt
                     import time
                     time.sleep(1)  # Wait a bit before retrying

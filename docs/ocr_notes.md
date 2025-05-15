@@ -13,6 +13,10 @@
 - [Qwen-2.5-72b is now the best open source OCR model](https://www.reddit.com/r/LocalLLaMA/comments/1jm4agx/qwen2572b_is_now_the_best_open_source_ocr_model/)
 - [olmOCR - The Open OCR System](https://www.youtube.com/watch?v=38loqDtlLok)
 
+## Notes
+
+- Qwen2.5-VL-32B quantized to 4-bit cannot fit into 24GB VRAM, so the 7B version was used.
+
 ## Costs
 
 ### Claude Sonnet 3.7

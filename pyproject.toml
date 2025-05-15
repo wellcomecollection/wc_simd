@@ -31,6 +31,9 @@ dependencies = [
     "sglang>=0.4.6.post3",
     "transformers>=4.51.3",
     "vllm>=0.8.5.post1",
+    "sagemaker>=2.244.0",
+    "openai>=1.78.1",
+    "langchain-openai>=0.3.16",
 ]
 
 [tool.pdm.dev-dependencies]
